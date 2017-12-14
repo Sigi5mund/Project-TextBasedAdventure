@@ -5,7 +5,8 @@ public enum Weapon {
     SWORD(100),
     STAFF(10),
     WAND(-100),
-    CLAWS(500);
+    CLAWS(500),
+    DEFAULT(0);
 
     int weaponDamage;
 

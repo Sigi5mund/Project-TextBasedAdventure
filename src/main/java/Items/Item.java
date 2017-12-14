@@ -1,7 +1,8 @@
 package Items;
 
-import java.util.ArrayList;
 import Characters.Character;
+
+import java.util.ArrayList;
 
 public class Item {
     String name;
@@ -53,6 +54,6 @@ public class Item {
     }
 
     public void takeGold(Character looter){
-        this.gold
+        looter.addGold(gold);
     }
 }

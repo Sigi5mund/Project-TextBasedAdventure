@@ -1,5 +1,6 @@
 package Characters;
 
+import Items.Corpse;
 import Items.Item;
 
 import java.util.ArrayList;
@@ -31,13 +32,9 @@ public class Character{
         this.damageModifier = new ArrayList<>(Arrays.asList(0.5, 0.75, 1.0, 1.0, 1.0, 1.0, 1.5, 2.0));
     }
 
-    public Character(Character character){
-            this.name = character.name;
-            this.gold = character.gold;
-            this.weapon = character.weapon;
-            this.armour = character.armour;
-
-        }
+    public ArrayList<Item> getItems() {
+        return items;
+    }
 
 
     public void setSuperWeapon(Boolean change){
@@ -129,7 +126,7 @@ public class Character{
     }
 
     public void payGold(double gold){
-        this.gold = this.gold
+        this.gold = this.gold - gold;
     }
 
     public void addHealth(double increase){
@@ -144,4 +141,7 @@ public class Character{
         this.healthBar = healthBar * 1.5;
     }
 
+    public String examineCorpse(Corpse corpse){
+        return
+    }
 }

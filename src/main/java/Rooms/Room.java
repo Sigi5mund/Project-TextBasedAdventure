@@ -1,6 +1,8 @@
 package Rooms;
 
 import Characters.Character;
+import Items.Item;
+
 import java.util.ArrayList;
 
 public abstract class Room {
@@ -8,12 +10,14 @@ public abstract class Room {
     double rewardGold;
     ArrayList<Character> goodies;
     ArrayList<Character> baddies;
+    ArrayList<Item> floor;
 
 
     public Room(ArrayList goodies, ArrayList baddies, double rewardGold) {
         this.rewardGold = rewardGold;
         this.goodies = goodies;
         this.baddies = baddies;
+        this.floor = new ArrayList<>();
 
     }
 
