@@ -74,6 +74,7 @@ public class Character{
         this.superWeapon = false;
         target.takeDamage(damage);
         target.checkAlive();
+
     }
 
     public void takeDamage(double damage) {
@@ -99,14 +100,15 @@ public class Character{
     }
 
 
-
-    public String checkAlive() {
+    public boolean checkAlive() {
         if (this.healthBar <= 0){
             this.alive = false;
-            return "AHHHHhhh!";
+            return alive;
         }
-        else
-            return "I am still alive";
+        else {
+            this.alive = true;
+            return alive;
+        }
     }
 
     public void setHealthBar(Double healthBar) {
@@ -115,6 +117,11 @@ public class Character{
 
     public double getGold() {
         return gold;
+    }
+
+    public void takeGold(Corpse corpse){
+        addGold(corpse.getGold());
+        corpse.setGold(corpse.getGold());
     }
 
     public void setGold(double gold) {
@@ -142,6 +149,8 @@ public class Character{
     }
 
     public String examineCorpse(Corpse corpse){
-        return
+        return corpse.getName() + " has " + corpse.getGold() + " gold, " + corpse.getArmour() + " armour and a " + corpse.getWeapon() + " weapon. What will you take?";
     }
+
+
 }

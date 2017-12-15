@@ -16,7 +16,7 @@ public class Priest extends Character implements ISpell {
     }
 
     @Override
-    public String castSpell(Character target) {
+    public String Spell(Character target) {
         double heal;
         heal = 300 * randomDamageModifier();
         target.healthBar = healthBar + heal;

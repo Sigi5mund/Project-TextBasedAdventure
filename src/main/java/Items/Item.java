@@ -3,18 +3,22 @@ package Items;
 import Characters.Character;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Item {
     String name;
     String description;
     double gold;
     ArrayList<Item> items;
+    ArrayList<Integer> randomChance;
 
     public Item(String name, double gold, ArrayList<Item> items) {
         this.name = name;
         this.description = description;
         this.gold = gold;
         this.items = items;
+        this.randomChance = new ArrayList<>(Arrays.asList(1, 1, 1,2,3));
     }
 
     public String getName() {
@@ -56,4 +60,23 @@ public class Item {
     public void takeGold(Character looter){
         looter.addGold(gold);
     }
+
+    public String openBox(Character target) {
+        Integer chance;
+        Collections.shuffle(this.randomChance);
+        chance = randomChance.get(0);
+        switch (chance) {
+            case 1:
+                target.addHealth(250);
+                return target.getName() + " opens the box in the corner and finds a health potion. It raises " + target.getName() + "'s health by 250 points!";
+            case 2:
+                target.increaseHealth50Percent();
+                return target.getName() + " opens the box in the corner and finds a health potion. The health potion raises " + target.getName() + "'s health by 50%!";
+            case 3:
+                target.setSuperWeapon(true);
+                return target.getName() + " opens the box. A magical dust hangs in the air for a moment before infusing "+ target.getName() + "'s weapon with magical energy";
+            default:
+                return "Error"; }
+    }
+
 }

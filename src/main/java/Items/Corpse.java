@@ -17,17 +17,6 @@ public class Corpse extends Item{
         this.weapon = Weapon.DEFAULT;
     }
 
-    public void corpseCreation(Character character){
-        Corpse playerCorpse;
-        playerCorpse= new Corpse(character.getName(), character.getGold(), character.getItems());
-        playerCorpse.setArmour(character.getArmour());
-        playerCorpse.setWeapon(character.getWeapon());
-        String name = character.getName() + "'s corpse";
-        
-    }
-
-
-    }
 
     public Armour getArmour() {
         return armour;

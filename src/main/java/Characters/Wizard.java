@@ -16,7 +16,7 @@ public class Wizard extends Character implements ISpell{
     }
 
     @Override
-    public String castSpell(Character target) {
+    public String Spell(Character target) {
         double damage;
         damage = 1000.00 * randomDamageModifier();
         target.healthBar = healthBar - damage;

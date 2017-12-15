@@ -46,17 +46,19 @@ public class CharacterTest {
     public void doesarmourwork(){
         knight.changeArmour(Armour.MAGIC);
     }
+
     @Test
     public void wizardTakesDamage(){
         wizard.takeDamage(250);
         assertEquals(250, wizard.getHealthBar(), 0.1);
-
     }
 
     @Test
     public void canDie(){
         dragon.attack(wizard);
-        assertEquals("AHHHHhhh!", wizard.checkAlive());
+        dragon.attack(wizard);
+        dragon.attack(wizard);
+        assertEquals(false, wizard.checkAlive());
     }
 
     @Test
@@ -65,24 +67,24 @@ public class CharacterTest {
         assertEquals(1100, knight.getHealthBar(),1);
     }
 
-    @Test
-    public void castSpellPriest(){
-        double health;
-        double health2;
-        health = knight.getHealthBar();
-        priest.castSpell(knight);
-        health2 = knight.getHealthBar();
-        assertNotEquals(health, health2);
-    }
-
-    @Test
-    public void castSpellWizard(){
-        double health;
-        double health2;
-        health = dragon.getHealthBar();
-        wizard.castSpell(dragon);
-        health2 = dragon.getHealthBar();
-        assertNotEquals(health, health2);
-    }
+//    @Test
+//    public void castSpellPriest(){
+//        double health;
+//        double health2;
+//        health = knight.getHealthBar();
+//        priest.castSpell(knight);
+//        health2 = knight.getHealthBar();
+//        assertNotEquals(health, health2);
+//    }
+//
+//    @Test
+//    public void castSpellWizard(){
+//        double health;
+//        double health2;
+//        health = dragon.getHealthBar();
+//        wizard.castSpell(dragon);
+//        health2 = dragon.getHealthBar();
+//        assertNotEquals(health, health2);
+//    }
 
 }
