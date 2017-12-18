@@ -1,6 +1,6 @@
 package Items;
 
-import Characters.Character;
+import Characters.Archetypes.Character;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,7 +67,7 @@ public class Item {
         chance = randomChance.get(0);
         switch (chance) {
             case 1:
-                target.addHealth(250);
+                target.increaseHealth(250);
                 return target.getName() + " opens the box in the corner and finds a health potion. It raises " + target.getName() + "'s health by 250 points!";
             case 2:
                 target.increaseHealth50Percent();

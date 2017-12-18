@@ -1,5 +1,9 @@
 import Characters.*;
-import Characters.Character;
+import Characters.Archetypes.Dragon;
+import Characters.Archetypes.Knight;
+import Characters.Archetypes.Priest;
+import Characters.Archetypes.Wizard;
+import Characters.Archetypes.Character;
 import Items.Item;
 import Rooms.Dungeon;
 import org.junit.Before;
@@ -12,32 +16,35 @@ import static org.junit.Assert.assertNotEquals;
 
 public class DungeonTest {
 
-    Dungeon dungeon;
-    ArrayList<Character> heroes;
-    ArrayList<Character> villains;
-    Item item;
+    private Dungeon dungeon;
+    private ArrayList<Character> heroes;
+    private ArrayList<Character> villains;
+    private Item item;
+
 
     @Before
     public void before() {
         heroes = new ArrayList<>();
-        Priest priest;
-        heroes.add(new Priest("Julian", 5, Weapon.WAND, Armour.CLOTHE));
-        heroes.add(new Wizard("Gandalf", 10, Weapon.STAFF, Armour.CLOTHE));
-        heroes.add(new Knight("Athina", 20, Weapon.SWORD, Armour.GOLD));
+        heroes.add(new Priest("Cadfael", 5, Weapon.BLESSED_SCEPTER, Armour.CLOTHE, OffHand.HEALWAND));
+        heroes.add(new Wizard("Gandalf", 10, Weapon.STAFF, Armour.CLOTHE, OffHand.DPSWAND));
+        heroes.add(new Knight("Athina", 20, Weapon.SWORD, Armour.GOLD, OffHand.SHIELD));
         villains = new ArrayList<>();
         villains.add(new Dragon("Smaug", 1000));
         dungeon = new Dungeon(heroes, villains, 10000);
         item = new Item("Suspicious box", 1, new ArrayList<>());
         dungeon.shelves.add(item);
-
     }
 
     @Test
     public void attackFromArrays() {
-        Character dragon = villains.get(0);
-        Character priest = heroes.get(0);
-        Character wizard = heroes.get(1);
-        Character knight = heroes.get(2);
+        Character dragon;
+        dragon = villains.get(0);
+        Character priest;
+        priest= heroes.get(0);
+        Character wizard;
+        wizard = heroes.get(1);
+        Character knight;
+        knight = heroes.get(2);
         dragon.attack(knight);
         assertNotEquals(1000, knight.getHealthBar());
         priest.attack(wizard);
@@ -54,22 +61,28 @@ public class DungeonTest {
 
     @Test
     public void checkCorpseCreationAndLootability() {
-        Character dragon = villains.get(0);
-        Character priest = heroes.get(0);
-        Character knight = heroes.get(2);
+        Character dragon;
+        dragon = villains.get(0);
+        Character priest;
+        priest= heroes.get(0);
+        Character knight;
+        knight = heroes.get(2);
+        dragon.attack(priest);
+        dragon.attack(priest);
         dragon.attack(priest);
         dragon.attack(priest);
         dungeon.endOfCombatChecks();
         assertEquals(1, dungeon.floor.size());
         assertEquals(2, dungeon.goodies.size());
-        assertEquals("Julian's corpse has 5.0 gold, CLOTHE armour and a WAND weapon. What will you take?",
-                knight.examineCorpse(dungeon.floor.get(0)));
+        assertEquals("Cadfael's corpse has 5.0 gold, CLOTHE armour and a BLESSED_SCEPTER weapon. What will you take?", knight.examineCorpse(dungeon.floor.get(0)));
     }
 
     @Test
     public void checkdeletecorpsesafterspawn() {
         Character dragon = villains.get(0);
         Character priest = heroes.get(0);
+        dragon.attack(priest);
+        dragon.attack(priest);
         dragon.attack(priest);
         dragon.attack(priest);
         dungeon.removeDead();
@@ -83,6 +96,8 @@ public class DungeonTest {
         Character knight = heroes.get(2);
         dragon.attack(priest);
         dragon.attack(priest);
+        dragon.attack(priest);
+        dragon.attack(priest);
         dungeon.endOfCombatChecks();
         double gold1 = knight.getGold();
         knight.takeGold(dungeon.floor.get(0));
@@ -90,15 +105,30 @@ public class DungeonTest {
         assertNotEquals(gold1, gold2);
     }
 
-//    @Test
-//    public void spellWorksInDungeons(){
-//        Character dragon;
-//        dragon = villains.get(0);
-//        Priest priest;
-//        priest = heroes.get(0);
-//        Character wizard = heroes.get(1);
-//        Character knight = heroes.get(2);
-//        priest.Spell(knight);
-//        wizard.Spell(dragon);
-//    }
+    @Test
+    public void spellWorksInDungeons(){
+        Character dragon;
+        dragon = villains.get(0);
+        Character priest;
+        priest = heroes.get(0);
+        Character wizard = heroes.get(1);
+        Character knight = heroes.get(2);
+        priest.spell(knight);
+        assertEquals(2100, knight.getHealthBar(), 1);
+        double dragonHP = dragon.getHealthBar();
+        wizard.spell(dragon);
+        assertNotEquals(dragonHP, dragon.getHealthBar());
+    }
+
+    @Test
+    public void overHealCorrectedByEndTurn(){
+        Character priest;
+        priest = heroes.get(0);
+        Character knight;
+        knight = heroes.get(2);
+        priest.spell(knight);
+        assertEquals(2100, knight.getHealthBar(), 1);
+        dungeon.endOfCombatChecks();
+        assertEquals(1800, knight.getHealthBar(), 1);
+    }
 }

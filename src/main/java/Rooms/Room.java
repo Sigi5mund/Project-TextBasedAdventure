@@ -1,8 +1,9 @@
 package Rooms;
 
-import Characters.Character;
+import Characters.Archetypes.Character;
 import Items.Corpse;
 import Items.Item;
+import Magic.ITick;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public abstract class Room {
     public ArrayList<Character> baddies;
     public ArrayList<Corpse> floor;
     public ArrayList<Item> shelves;
+    public ArrayList<ITick> hotsAndDots;
 
 
     public Room(ArrayList goodies, ArrayList baddies, double rewardGold) {
@@ -22,13 +24,16 @@ public abstract class Room {
         this.baddies = baddies;
         this.floor = new ArrayList<>();
         this.shelves = new ArrayList<>();
-
+        this.hotsAndDots = new ArrayList<>();
     }
+
+
+
+//    Goodies and Baddies ArrayList Maintenance:
 
     public ArrayList<Character> getGoodies() {
         return goodies;
     }
-
 
     public void setGoodies(ArrayList<Character> goodies) {
         this.goodies = goodies;
@@ -41,7 +46,6 @@ public abstract class Room {
     public void removeGoodies(Character character){
         this.goodies.remove(character);
     }
-
 
     public ArrayList<Character> getBaddies() {
         return baddies;
@@ -59,6 +63,11 @@ public abstract class Room {
         this.baddies.remove(character);
     }
 
+
+
+
+//    Room Reward Mechanisms:
+
     public void collectReward(Character character){
         character.setGold(character.getGold() + this.rewardGold);
     }
@@ -71,11 +80,34 @@ public abstract class Room {
         this.rewardGold = rewardGold;
     }
 
-    public void addToFloor(Corpse corpse) {
+
+
+//    Corpse Creation and Implementation:
+
+    public void removeDead() {
+        baddies.removeIf(next -> !next.checkAlive());
+        goodies.removeIf(next -> !next.checkAlive());
+    }
+
+    private Corpse corpseCreation(Character character){
+        Corpse playerCorpse;
+        playerCorpse= new Corpse(character.getName()+ "'s corpse", character.getGold(), character.getItems());
+        playerCorpse.setArmour(character.getArmour());
+        playerCorpse.setWeapon(character.getWeapon());
+        playerCorpse.setOffHand(character.getOffHand());
+        return playerCorpse;
+    }
+
+    private void addToFloor(Corpse corpse) {
         this.floor.add(corpse);
     }
 
-    public void checkForCorpses(){
+
+
+
+//    End of Combat Turn Checks:
+
+    private void checkForCorpses(){
         for (Character character: goodies){
             if (character.checkAlive() == false){
                 addToFloor(corpseCreation(character));
@@ -88,45 +120,41 @@ public abstract class Room {
         }
     }
 
-    public void removeDead() {
-        baddies.removeIf(next -> !next.checkAlive());
-        goodies.removeIf(next -> !next.checkAlive());
-
+    private void removeStuns() {
+        for (Character character : goodies) {
+            character.setStunned(false);
+        }
+        for (Character character : baddies) {
+            character.setStunned(false);
+        }
     }
 
-//    public void checkArrayForDeadCharacters(){
-//
-//        ArrayList<Character> toDelete = new ArrayList<>();
-//
-//        for (Character character: goodies){
-//            if (character.checkAlive() == false){
-//                toDelete.add(character);
-//            }
-//        }
-//        goodies.removeAll(toDelete);
-//        toDelete.clear();
-//
-//        for (Character character: baddies){
-//            if (character.checkAlive() == false){
-//                toDelete.add(character);
-//            }
-//        }
-//        baddies.removeAll(toDelete);
-//    }
-
-    public Corpse corpseCreation(Character character){
-        Corpse playerCorpse;
-        playerCorpse= new Corpse(character.getName()+ "'s corpse", character.getGold(), character.getItems());
-        playerCorpse.setArmour(character.getArmour());
-        playerCorpse.setWeapon(character.getWeapon());
-        return playerCorpse;
+    private void triggerITickMechanism(){
+        for (ITick iTick: hotsAndDots) {
+            iTick.tick();
+        }
     }
 
+    private void checkForMaxHealth() {
+        for (Character character : goodies) {
+            character.maxHealthExceededCheck();
+        }
+        for (Character character : baddies) {
+            character.maxHealthExceededCheck();
+        }
+    }
 
     public void endOfCombatChecks(){
         checkForCorpses();
         removeDead();
+        checkForMaxHealth();
+        removeStuns();
+        triggerITickMechanism();
+
     }
+
+
+
 
 //        public String goToTheNextRoom(ArrayList<Character> adventurers){
 //        if (baddies.size() == 0){
