@@ -1,14 +1,13 @@
-import Characters.*;
-import Characters.Archetypes.Dragon;
-import Characters.Archetypes.Knight;
-import Characters.Archetypes.Priest;
-import Characters.Archetypes.Wizard;
 import Characters.Archetypes.Character;
+import Characters.Archetypes.*;
+import Characters.Armour;
+import Characters.OffHand;
+import Characters.Weapon;
 import Items.Item;
+import Magic.HealOverTime;
 import Rooms.Dungeon;
 import org.junit.Before;
 import org.junit.Test;
-
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -20,6 +19,7 @@ public class DungeonTest {
     private ArrayList<Character> heroes;
     private ArrayList<Character> villains;
     private Item item;
+    private HealOverTime renew;
 
 
     @Before
@@ -33,6 +33,8 @@ public class DungeonTest {
         dungeon = new Dungeon(heroes, villains, 10000);
         item = new Item("Suspicious box", 1, new ArrayList<>());
         dungeon.shelves.add(item);
+
+
     }
 
     @Test
@@ -131,4 +133,75 @@ public class DungeonTest {
         dungeon.endOfCombatChecks();
         assertEquals(1800, knight.getHealthBar(), 1);
     }
+
+
+//    HOTs and Dots:
+    @Test
+    public void hotInteractsWithTarget(){
+        Character knight;
+        knight = heroes.get(2);
+        renew = new HealOverTime(knight, 50, 3);
+        renew.tick();
+        assertEquals(1850, knight.getHealthBar(), 10);
+    }
+
+    @Test
+    public void hotHasDuration(){
+        Character knight;
+        knight = heroes.get(2);
+        renew = new HealOverTime(knight, 50, 3);
+        renew.tick();
+        assertEquals(1850, knight.getHealthBar(), 10);
+        assertEquals(2, renew.getDuration(), 0.1);
+        renew.tick();
+        assertEquals(1900, knight.getHealthBar(), 10);
+        assertEquals(1, renew.getDuration(), 0.1);
+        renew.tick();
+        assertEquals(1950, knight.getHealthBar(), 10);
+        assertEquals(0, renew.getDuration(), 0.1);
+        renew.tick();
+        assertEquals(1950, knight.getHealthBar(), 10);
+        assertEquals(0, renew.getDuration(), 0.1);
+
+    }
+
+    @Test
+    public void ITickLoopMechanismWorks(){
+        Character knight;
+        knight = heroes.get(2);
+        renew = new HealOverTime(knight, 50, 3);
+        dungeon.hotsAndDots.add(renew);
+        assertEquals(1, dungeon.hotsAndDots.size());
+        dungeon.triggerITickMechanism();
+        assertEquals(1850, knight.getHealthBar(), 10);
+        dungeon.triggerITickMechanism();
+        assertEquals(1900, knight.getHealthBar(), 10);
+        dungeon.triggerITickMechanism();
+        assertEquals(1950, knight.getHealthBar(), 10);
+        dungeon.triggerITickMechanism();
+        assertEquals(1950, knight.getHealthBar(), 10);
+    }
+
+    @Test
+    public void endOfTurnTriggersHots(){
+        Character knight;
+        knight = heroes.get(2);
+        Character dragon;
+        dragon = villains.get(0);
+        dragon.attack(knight);
+        renew = new HealOverTime(knight, 50, 3);
+        dungeon.hotsAndDots.add(renew);
+        assertEquals(1, dungeon.hotsAndDots.size());
+        assertEquals(1675, knight.getHealthBar(), 10);
+        dungeon.endOfCombatChecks();
+        assertEquals(1725, knight.getHealthBar(), 10);
+        dungeon.endOfCombatChecks();
+        assertEquals(1775, knight.getHealthBar(), 10);
+        dungeon.endOfCombatChecks();
+        assertEquals(1800, knight.getHealthBar(), 10);
+        dungeon.endOfCombatChecks();
+        assertEquals(1800, knight.getHealthBar(), 10);
+    }
+
+
 }

@@ -129,7 +129,7 @@ public abstract class Room {
         }
     }
 
-    private void triggerITickMechanism(){
+    public void triggerITickMechanism(){
         for (ITick iTick: hotsAndDots) {
             iTick.tick();
         }
@@ -147,10 +147,9 @@ public abstract class Room {
     public void endOfCombatChecks(){
         checkForCorpses();
         removeDead();
-        checkForMaxHealth();
         removeStuns();
         triggerITickMechanism();
-
+        checkForMaxHealth();
     }
 
 

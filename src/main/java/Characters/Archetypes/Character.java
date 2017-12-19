@@ -33,6 +33,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     protected  Integer threat;
     protected  Integer critChance;
     protected  Boolean stunned;
+    protected double maxHealth;
     protected Integer dodgeChance;
     protected  Integer blockChance;
     protected  Integer magicDefense;
@@ -41,7 +42,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     protected  String defenseExclamation;
     protected String healedExclamation;
     protected String critExclamation;
-    protected double maxHealth;
+
 
 
     public Character(String name, double gold, Weapon weapon, Armour armour, OffHand offHand) {
@@ -66,12 +67,13 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         this.blockChance = strength/100;
         this.magicDefense = intellect/100;
         this.stunnedChance = stamina/100;
+        this.maxHealth = stamina * 20;
+        this.healthBar = maxHealth;
+//      In-Game Messages:
         this.attackExclamation = "";
         this.defenseExclamation= "";
         this.healedExclamation = "";
         this.critExclamation = "";
-        this.maxHealth = stamina * 20;
-        this.healthBar = maxHealth;
     }
 
 //  Attack Mechanics:

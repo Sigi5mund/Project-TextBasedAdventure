@@ -8,9 +8,9 @@ public class HealOverTime implements ITick{
     Integer healingPerTick;
     Integer duration;
 
-    public HealOverTime(Character target, Integer damagePerTick, Integer duration) {
+    public HealOverTime(Character target, Integer healingPerTick, Integer duration) {
         this.target = target;
-        this.healingPerTick = damagePerTick;
+        this.healingPerTick = healingPerTick;
         this.duration = duration;
     }
 
@@ -37,7 +37,7 @@ public class HealOverTime implements ITick{
         }
         else {
             target.increaseHealth(healingPerTick);
-            setDuration(duration -1);
+            setDuration(this.duration -1);
         }
     }
 
