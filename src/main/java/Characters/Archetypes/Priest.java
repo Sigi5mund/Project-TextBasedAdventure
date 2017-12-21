@@ -21,6 +21,7 @@ public class Priest extends Character {
         this.baseThreat = 20;
         this.threat = 0;
         this.critChance = intellect/100;
+        this.critDamage = intellect/25;
         this.stunned = false;
         this.manaLevel = 50;
         this.manaRegen = 5;

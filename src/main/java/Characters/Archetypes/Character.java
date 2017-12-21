@@ -23,6 +23,8 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     protected  ArrayList<Item> items;
     protected boolean superWeapon;
     protected ArrayList<Double> damageModifier;
+    protected ArrayList<Double> critModifier;
+    protected ArrayList<Double> blockModifier;
     protected Armour armour;
     protected  boolean alive;
     protected  Integer strength;
@@ -32,6 +34,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     protected Integer baseThreat;
     protected  Integer threat;
     protected  Integer critChance;
+    protected  Integer critDamage;
     protected  Boolean stunned;
     protected double maxHealth;
     protected Integer dodgeChance;
@@ -55,6 +58,8 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         this.armour = armour;
         this.alive = true;
         this.damageModifier = new ArrayList<>(Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0));
+        this.critModifier = new ArrayList<>(Arrays.asList(-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0));
+        this.blockModifier = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.6, 0.7, 0.7, 0.8, 0.9));
         this.strength = 100;
         this.agility = 100;
         this.intellect = 100;
@@ -62,9 +67,10 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         this.baseThreat = 50;
         this.threat = 0;
         this.critChance = 50;
+        this.critDamage = 50;
         this.stunned = false;
         this.dodgeChance = agility/100;
-        this.blockChance = strength/100;
+        this.blockChance = strength/275;
         this.magicDefense = intellect/100;
         this.stunnedChance = stamina/100;
         this.maxHealth = stamina * 20;
@@ -89,6 +95,49 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         target.checkAlive();
     }
 
+    public void weaponattack1(Character target){
+        double damage;
+        Weapon weapon = this.weapon;
+        damage = this.calculateWeaponDamage(weapon);
+        damage = damage * calculateCritChance();
+        damage = damage * doesSuperWeaponApply();
+        damage = damage * calculateBlockChance();
+        target.takeDamage(damage);
+        target.checkAlive();
+        this.threat = this.threat + this.weapon.getThreatIncrease();
+    }
+
+    public double calculateCritChance(){
+        if (this.critChance + randomCritModifier() >= 1){
+            return this.critDamage;
+        }
+        return 1.0;
+    }
+
+    public double calculateWeaponDamage(Weapon weapon){
+        double damage;
+        damage = weapon.getWeaponDamage() * this.getStrength()/100 * randomDamageModifier();
+        return damage;
+    }
+
+    public double calculateBlockChance(){
+        if (this.canBlockDamage(this.offHand) == true){
+            if (this.blockChance + randomBlockModifier() >=1){
+                return 0.0;
+            }
+        }
+        return 1.0;
+    }
+
+    public double doesSuperWeaponApply() {
+        if (this.superWeapon) {
+            return 3.0;
+        }
+        this.superWeapon = false;
+        return 1.0;
+    }
+
+
     public void takeDamage(double damage) {
         if (damage < 0) {
             this.healthBar = healthBar - damage;
@@ -103,11 +152,20 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         return damageModifier.get(0);
     }
 
+    public Double randomCritModifier(){
+        Collections.shuffle(this.critModifier);
+        return critModifier.get(0);
+    }
+
+    public Double randomBlockModifier(){
+        Collections.shuffle(this.blockModifier);
+        return blockModifier.get(0);
+    }
+
     @Override
     public String spell(Character target) {
         return null;
     }
-
 
 
 
@@ -137,7 +195,9 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         return this.offHand;
     }
 
-
+    public boolean canBlockDamage(OffHand offhand){
+           return offhand.CanBlock();
+    }
 
 
 //    Health Getters and Setters:

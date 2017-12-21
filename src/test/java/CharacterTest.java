@@ -1,8 +1,5 @@
 import Characters.*;
-import Characters.Archetypes.Dragon;
-import Characters.Archetypes.Knight;
-import Characters.Archetypes.Priest;
-import Characters.Archetypes.Wizard;
+import Characters.Archetypes.*;
 import Characters.Archetypes.Character;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +13,7 @@ public class CharacterTest {
     Character wizard;
     Character dragon;
     Character priest;
+    Character orcCaptain;
 
     @Before
     public void before(){
@@ -24,41 +22,31 @@ public class CharacterTest {
         wizard = new Wizard( "Gandalf",5, Weapon.STAFF, Armour.CLOTHE, OffHand.DPSWAND);
         dragon = new Dragon("Smaug",10000000);
         priest = new Priest("Cadfael", 100,Weapon.BLESSED_SCEPTER, Armour.LEATHER, OffHand.HEALWAND);
+        orcCaptain = new OrcCaptain("Badrag", 100, Weapon.SWORD, Armour.PLATE, OffHand.KNIFE);
+
     }
 
-    @Test
-    public void knightAttacksDragon(){
-        double health;
-        double health2;
-        health = dragon.getHealthBar();
-        knight.attack(dragon);
-        health2 = dragon.getHealthBar();
-        assertNotEquals(health, health2);
-    }
 
     @Test
     public void attackIsModifiedByArmour(){
         knight.changeArmour(Armour.MAGIC);
-        dragon.attack(knight);
+        knight.takeDamage(200000000);
         assertEquals(1800, knight.getHealthBar(),1);
         knight.changeArmour(Armour.CLOTHE);
-        dragon.attack(knight);
+        knight.takeDamage(500);
         assertEquals(1300, knight.getHealthBar(), 1);
 
     }
 
     @Test
     public void knightTakesDamage(){
-        dragon.attack(knight);
+        knight.takeDamage(500);
         assertEquals(1675, knight.getHealthBar(), 0.1);
     }
 
     @Test
     public void canDie(){
-        dragon.attack(wizard);
-        dragon.attack(wizard);
-        dragon.attack(wizard);
-        dragon.attack(wizard);
+        wizard.takeDamage(2000);
         assertEquals(false, wizard.checkAlive());
     }
 
@@ -88,4 +76,9 @@ public class CharacterTest {
         assertNotEquals(health, health2);
     }
 
+    @Test
+    public void newAttackMethod(){
+        orcCaptain.weaponattack1(knight);
+        assertEquals(1780, knight.getHealthBar(), 1);
+    }
 }

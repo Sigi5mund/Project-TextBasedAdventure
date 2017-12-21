@@ -2,22 +2,21 @@ package Characters;
 
 public enum OffHand {
 
-    KNIFE(100, true, 10, false),
-    SHIELD(10, true, 5, true),
-    HEALWAND(-100, false, 20, false),
-    DPSWAND(100, true, 50, false),
-    CLAW (500, false, 100, true),
-    DEFAULT(0, false, 0, false);
+    KNIFE(100, 10, false),
+    SHIELD(10, 5, true),
+    HEALWAND(-100, 20, false),
+    DPSWAND(100, 50, false),
+    BITE (500, 1000, false),
+    DEFAULT(0, 0, false);
 
     int weaponDamage;
-    boolean parryable;
     Integer threatIncrease;
     boolean canBlock;
 
 
-    OffHand(int weaponDamage, boolean parryable, Integer threatIncrease, boolean canBlock) {
+    OffHand(int weaponDamage, Integer threatIncrease, boolean canBlock) {
         this.weaponDamage = weaponDamage;
-        this.parryable = parryable;
+
         this.threatIncrease = threatIncrease;
         this.canBlock = canBlock;
     }
@@ -26,15 +25,11 @@ public enum OffHand {
         return weaponDamage;
     }
 
-    public boolean isParryable() {
-        return parryable;
-    }
-
     public Integer getThreatIncrease() {
         return threatIncrease;
     }
 
-    public boolean isCanBlock() {
+    public boolean CanBlock() {
         return canBlock;
     }
 }

@@ -1,13 +1,15 @@
 package Characters.Archetypes;
 
 import Characters.Armour;
+import Characters.Interfaces.ITakeDamage;
+import Characters.Interfaces.IThreatAttack;
 import Characters.OffHand;
 import Characters.Weapon;
 
-public class Knight extends Character {
+public class OrcCaptain extends Character implements ITakeDamage, IThreatAttack {
 
 
-    public Knight(String name, int gold, Weapon weapon, Armour armour, OffHand offHand) {
+    public OrcCaptain(String name, double gold, Weapon weapon, Armour armour, OffHand offHand) {
         super(name, gold, weapon, armour, offHand);
 
         this.strength = 80;
@@ -22,6 +24,5 @@ public class Knight extends Character {
         this.maxHealth = stamina * 20;
         this.healthBar = maxHealth;
     }
-
 
 }
