@@ -48,6 +48,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
 
 
 
+
     public Character(String name, double gold, Weapon weapon, Armour armour, OffHand offHand) {
         this.name = name;
         this.gold = gold;
@@ -57,9 +58,13 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         this.superWeapon = false;
         this.armour = armour;
         this.alive = true;
+
+//        Random Modifiers:
         this.damageModifier = new ArrayList<>(Arrays.asList(1.0, 1.0, 1.0, 1.0, 1.0));
         this.critModifier = new ArrayList<>(Arrays.asList(-0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 1.0));
         this.blockModifier = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.6, 0.7, 0.7, 0.8, 0.9));
+
+//        Stats:
         this.strength = 100;
         this.agility = 100;
         this.intellect = 100;
@@ -75,6 +80,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         this.stunnedChance = stamina/100;
         this.maxHealth = stamina * 20;
         this.healthBar = maxHealth;
+
 //      In-Game Messages:
         this.attackExclamation = "";
         this.defenseExclamation= "";
@@ -91,7 +97,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
             damage = damage * 3;
         }
         this.superWeapon = false;
-        target.takeDamage(damage);
+        target.takePhysicalDamage(damage);
         target.checkAlive();
     }
 
@@ -102,7 +108,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         damage = damage * calculateCritChance();
         damage = damage * doesSuperWeaponApply();
         damage = damage * calculateBlockChance();
-        target.takeDamage(damage);
+        target.takePhysicalDamage(damage);
         target.checkAlive();
         this.threat = this.threat + this.weapon.getThreatIncrease();
     }
@@ -138,13 +144,26 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     }
 
 
-    public void takeDamage(double damage) {
+    public void takePhysicalDamage(double damage) {
         if (damage < 0) {
             this.healthBar = healthBar - damage;
         } else {
             damage = damage * armour.getValue();
             this.healthBar = this.healthBar - damage;
         }
+    }
+
+    public void takeMagicDamage(double damage){
+        if (damage < 0) {
+            this.healthBar = healthBar - damage;
+        } else {
+            damage = damage * calculateMagicResistance(this);
+            this.healthBar = this.healthBar - damage;
+        }
+    }
+
+    public Integer calculateMagicResistance(Character target){
+        return 1 - (target.getIntellect()/100) ;
     }
 
     public Double randomDamageModifier() {

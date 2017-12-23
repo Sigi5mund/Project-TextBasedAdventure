@@ -35,12 +35,11 @@ public class Dragon extends Character implements IThreatAttack {
     target.healthBar = healthBar - damage;
     return "FireBall : Did " + damage + "damage.";}
 
-
-    public String fireWall(ArrayList<Character> targets){
+    public String spell(ArrayList<Character> targets){
         double damage;
         damage = 200.00;
         for (Character character:targets) {
-            character.takeDamage(damage);
+            character.takeMagicDamage(damage);
         }
         return "FireWall : Damage to everyone!";}
 
