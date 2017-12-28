@@ -34,6 +34,6 @@ public class Wizard extends Character {
     public String spell(Character target) {
         double damage;
         damage = 1000.00 * randomDamageModifier();
-        target.takeMagicDamage(damage);
+        target.magicDamage(damage);
         return "Fireball! : Did " + damage + "damage.";}
 }

@@ -68,7 +68,7 @@ public class DungeonTest {
 
     @Test
     public void checkCorpseCreationAndLootability() {
-        healer.takePhysicalDamage(2000);
+        healer.physicalDamage(2000);
         dungeon.endOfCombatChecks();
         assertEquals(1, dungeon.floor.size());
         assertEquals(2, dungeon.goodies.size());
@@ -77,7 +77,7 @@ public class DungeonTest {
 
     @Test
     public void checkdeletecorpsesafterspawn() {
-        healer.takePhysicalDamage(2000);
+        healer.physicalDamage(2000);
         dungeon.removeDead();
         assertEquals(2, dungeon.goodies.size());
     }
@@ -85,7 +85,7 @@ public class DungeonTest {
     @Test
     public void checkGoldLootableAndCorpseGoldEmptyAfter() {
 
-        healer.takePhysicalDamage(2000);
+        healer.physicalDamage(2000);
         dungeon.endOfCombatChecks();
         double gold1 = tank.getGold();
         tank.takeGold(dungeon.floor.get(0));
@@ -156,7 +156,7 @@ public class DungeonTest {
 
     @Test
     public void endOfTurnTriggersHots() {
-        tank.takePhysicalDamage(500);
+        tank.physicalDamage(500);
         renew = new HealOverTime(tank, 50, 3);
         dungeon.hotsAndDots.add(renew);
         assertEquals(1, dungeon.hotsAndDots.size());

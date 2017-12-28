@@ -30,23 +30,23 @@ public class CharacterTest {
     @Test
     public void attackIsModifiedByArmour(){
         tank.changeArmour(Armour.MAGIC);
-        tank.takePhysicalDamage(200000000);
+        tank.physicalDamage(200000000);
         assertEquals(1800, tank.getHealthBar(),1);
         tank.changeArmour(Armour.CLOTHE);
-        tank.takePhysicalDamage(500);
+        tank.physicalDamage(500);
         assertEquals(1300, tank.getHealthBar(), 1);
 
     }
 
     @Test
     public void knightTakesDamage(){
-        tank.takePhysicalDamage(500);
+        tank.physicalDamage(500);
         assertEquals(1675, tank.getHealthBar(), 0.1);
     }
 
     @Test
     public void canDie(){
-        dps.takePhysicalDamage(2000);
+        dps.physicalDamage(2000);
         assertEquals(false, dps.checkAlive());
     }
 

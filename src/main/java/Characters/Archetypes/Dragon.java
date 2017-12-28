@@ -39,7 +39,7 @@ public class Dragon extends Character implements IThreatAttack {
         double damage;
         damage = 200.00;
         for (Character character:targets) {
-            character.takeMagicDamage(damage);
+            character.magicDamage(damage);
         }
         return "FireWall : Damage to everyone!";}
 

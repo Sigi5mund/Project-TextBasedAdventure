@@ -97,7 +97,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
             damage = damage * 3;
         }
         this.superWeapon = false;
-        target.takePhysicalDamage(damage);
+        target.physicalDamage(damage);
         target.checkAlive();
     }
 
@@ -108,7 +108,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         damage = damage * calculateCritChance();
         damage = damage * doesSuperWeaponApply();
         damage = damage * calculateBlockChance();
-        target.takePhysicalDamage(damage);
+        target.physicalDamage(damage);
         target.checkAlive();
         this.threat = this.threat + this.weapon.getThreatIncrease();
     }
@@ -144,7 +144,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
     }
 
 
-    public void takePhysicalDamage(double damage) {
+    public void physicalDamage(double damage) {
         if (damage < 0) {
             this.healthBar = healthBar - damage;
         } else {
@@ -153,7 +153,7 @@ public abstract class Character implements ISpell, IAttack, ITakeDamage {
         }
     }
 
-    public void takeMagicDamage(double damage){
+    public void magicDamage(double damage){
         if (damage < 0) {
             this.healthBar = healthBar - damage;
         } else {
